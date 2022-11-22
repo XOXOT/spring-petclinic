@@ -2,14 +2,14 @@ pipeline {
     agent  {
         label 'dind-agent'
     }
-    // stages {
-    //     stage("Build") {
-    //         steps {
-    //             script {
-    //                 sh "./mvnw clean package"
-    //             }
-    //         }
-    //     }
+    stages {
+        // stage("Build") {
+        //     steps {
+        //         script {
+        //             sh "./mvnw clean package"
+        //         }
+        //     }
+        // }
         stage("Build image") {
             steps {
                 script {
