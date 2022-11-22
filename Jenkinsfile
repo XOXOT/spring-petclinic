@@ -13,7 +13,7 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    app = docker.build("terraform-tae/petclinic")
+                    sh " docker build jenkins -t terraform-tae/petclinic
                 }
             }
         }
