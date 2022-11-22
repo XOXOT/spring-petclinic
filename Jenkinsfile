@@ -10,17 +10,25 @@ pipeline {
         //         }
         //     }
         // }
-        stage("Build image") {
+        // stage("Build image") {
+        //     steps {
+        //         script {
+        //             app = docker.build("terraform-tae/petclinic")
+        //         }
+        //     }
+        // }
+        stage('Build image') {
             steps {
-                script {
-                    app = docker.build("terraform-tae/petclinic")
-                }
+                sh 'docker build -t terraform-tae:$BUILD_NUMBER .'
+                sh 'docker image tag terraform-tae:$BUILD_NUMBER terraform-tae:latest'
+                echo 'Build image...'
             }
         }
+
         stage("Push image to gcr") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io', 'gcr:github') {
+                    docker.withRegistry('https://gcr.io', 'gcr:terraform-tae') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
         }
