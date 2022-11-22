@@ -12,9 +12,7 @@ pipeline {
         }
         stage("Build image") {
             steps {
-                script {
                     app = docker.build("terraform-tae/petclinic")
-                }
             }
         }
         stage("Push image to gcr") {
