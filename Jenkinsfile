@@ -28,7 +28,7 @@ pipeline {
         stage("Push image to gcr") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io', 'gcr:terraform-tae') {
+                    docker.withRegistry('https://asia.gcr.io', 'gcr:terraform-tae') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
         }
