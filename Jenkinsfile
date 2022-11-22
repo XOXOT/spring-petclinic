@@ -12,15 +12,26 @@ pipeline {
         }
     }
 }
+
 node {
-        stage("Push image to gcr") {
+    stage("Push image to gcr") {
             steps {
                 script {
-                    docker.withRegistry('https://asia.gcr.io', 'gcr:terraform-tae') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-        }
-                }
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
+                    {
+                      withCredentials([file(credentialsId: 'terraform-tae', variable: 'GC_KEY')]){
+                      sh "cat '$GC_KEY' | docker login -u _json_key --password-stdin https://gcr.io"
+                      sh "gcloud auth activate-service-account --key-file='$GC_KEY'"
+                      sh "gcloud auth configure-docker"
+                      GLOUD_AUTH = sh (
+                          script: 'gcloud auth print-access-token',
+                         returnStdout: true
+                                                ).trim()
+                     echo "Pushing image To GCR"
+                     sh "docker push asia.gcr.io/terraform-tae/petclinic:${image-tag}"
+                     }
+                    }
+                }               
             }
         }
 }
