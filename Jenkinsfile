@@ -1,26 +1,22 @@
-node {
+pipeline {
     agent  {
         label 'dind-agent'
     }
     stages {
-        // stage('Build image') {
-        //     steps {
-        //         sh 'docker build -t terraform-tae/petclinic .'
-        //         echo 'Build image...'
-        //     }
-        // }
-        
         stage('Build image') {
             steps {
-                dockerImage = docker.build('gcr.io/terraform-tae/petclinic')
+                script {
+                    app = docker.build("terraform-tae/petclinic")
+                }
             }
         }
+        
         
         stage("Push image to gcr") {
             steps {
                 script {
                     docker.withRegistry('https://asia.gcr.io', 'gcr:terraform-tae') {
-                        dockerImage.push("${env.BUILD_NUMBER}")
+                        app.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
