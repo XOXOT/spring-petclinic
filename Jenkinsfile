@@ -3,10 +3,16 @@ pipeline {
         label 'dind-agent'
     }
     stages {
+        // stage('Build image') {
+        //     steps {
+        //         sh 'docker build -t terraform-tae/petclinic .'
+        //         echo 'Build image...'
+        //     }
+        // }
+        
         stage('Build image') {
             steps {
-                sh 'docker build -t terraform-tae/petclinic .'
-                echo 'Build image...'
+                dockerImage = docker.build('gcr.io/terraform-tae/petclinic')
             }
         }
         
