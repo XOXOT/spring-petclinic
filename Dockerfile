@@ -1,7 +1,8 @@
-FROM openjdk:18-jdk-alpine
+FROM openjdk:11 AS fatclinic
+ADD fatclinic.tar / 
+WORKDIR  /fatclinic 
+RUN ./mvnw clean install
 
-EXPOSE 8080
-
-ADD target/spring-petclinic-2.7.0-SNAPSHOT.jar petclinic.jar
-
-ENTRYPOINT ["java" ,"-jar","-Dspring.profiles.active=mysql", "petclinic.jar"]
+FROM tomcat:9.0-jdk17
+ADD server.xml /usr/local/tomcat/conf
+COPY --from=fatclinic /fatclinic/target/petclinic.war /usr/local/tomcat/webapps

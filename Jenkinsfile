@@ -6,26 +6,24 @@ pipeline {
     //     stage("Build") {
     //         steps {
     //             script {
-    //                 sh "./mvnw clean install"
+    //                 sh "./mvnw clean package"
     //             }
     //         }
     //     }
-
-        stage('Build credit-demo image')  {
+        stage("Build image") {
             steps {
                 script {
-                    dockerImage = docker.build('gcr.io/petclinic')
+                    app = docker.build("terraform-tae/petclinic")
                 }
             }
         }
-
-        stage('Push to registry') {
+        stage("Push image to gcr") {
             steps {
                 script {
-                    docker.withRegistry('https://gcr.io', 'gcr:terraform-tae') {
-                    dockerImage.push("${env.BUILD_NUMBER}")
-                    dockerImage.push("latest")
-                    }
+                    docker.withRegistry('https://gcr.io', 'gcr:github') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+        }
                 }
             }
         }
