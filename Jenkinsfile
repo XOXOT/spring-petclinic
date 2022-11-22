@@ -10,11 +10,8 @@ pipeline {
                 echo 'Build image...'
             }
         }
-    }
-}
 
-node {
-    stage("Push image to gcr") {
+        stage("Push image to gcr") {
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
@@ -34,4 +31,5 @@ node {
                 }               
             }
         }
+    }
 }
