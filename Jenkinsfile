@@ -2,14 +2,14 @@ pipeline {
     agent  {
         label 'dind-agent'
     }
-    stages {
-        stage("Build") {
-            steps {
-                script {
-                    sh "./mvnw clean install"
-                }
-            }
-        }
+    // stages {
+    //     stage("Build") {
+    //         steps {
+    //             script {
+    //                 sh "./mvnw clean install"
+    //             }
+    //         }
+    //     }
 
         stage('Build credit-demo image')  {
             steps {
