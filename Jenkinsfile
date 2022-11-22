@@ -5,18 +5,17 @@ pipeline {
     stages {
         stage('Build image') {
             steps {
-                app = docker.build("terraform-tae/petclinic")
+                sh 'docker build -t terraform-tae/petclinic .'
                 echo 'Build image...'
             }
         }
-
+        
         stage("Push image to gcr") {
             steps {
                 script {
                     docker.withRegistry('https://asia.gcr.io', 'gcr:terraform-tae') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-        }
+                        dockerImage.push("${env.BUILD_NUMBER}")
+                    }
                 }
             }
         }
