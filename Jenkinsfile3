@@ -3,6 +3,20 @@ pipeline {
         label 'dind-agent'
     }
     stages {
+        // stage("Build") {
+        //     steps {
+        //         script {
+        //             sh "./mvnw clean package"
+        //         }
+        //     }
+        // }
+        // stage("Build image") {
+        //     steps {
+        //         script {
+        //             app = docker.build("terraform-tae/petclinic")
+        //         }
+        //     }
+        // }
         stage('Build image') {
             steps {
                 sh 'docker build -t terraform-tae:$BUILD_NUMBER .'
@@ -10,9 +24,7 @@ pipeline {
                 echo 'Build image...'
             }
         }
-    }
-}
-node {
+
         stage("Push image to gcr") {
             steps {
                 script {
@@ -23,4 +35,6 @@ node {
                 }
             }
         }
+        
+    }
 }
