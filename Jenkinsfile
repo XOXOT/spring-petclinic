@@ -5,11 +5,11 @@ pipeline {
     stages {
         stage('Build image') {
             steps {
-                sh 'docker build -t terraform-tae/petclinic .'
+                app = docker.build("terraform-tae/petclinic")
                 echo 'Build image...'
             }
         }
-        
+
         stage("Push image to gcr") {
             steps {
                 script {
